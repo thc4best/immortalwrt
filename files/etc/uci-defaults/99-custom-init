@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# 设置 LAN
+uci set network.lan.proto='static'
+uci set network.lan.ipaddr='192.168.123.254'
+uci set network.lan.netmask='255.255.255.0'
+
+# 设置 WAN PPPoE
+uci set network.wan.proto='pppoe'
+uci set network.wan.username='02544992934'
+uci set network.wan.password='010203'
+
+uci commit network
+
+# 设置 root 密码
+PASS_HASH=$(echo "wrx19960515xq" | openssl passwd -1 -stdin)
+sed -i "s|root::0:0:99999:7:::|root:${PASS_HASH}:0:0:99999:7:::" /etc/shadow
+
+exit 0
